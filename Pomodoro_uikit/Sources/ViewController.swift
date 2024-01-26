@@ -23,6 +23,21 @@ class ViewController: UIViewController {
         return label
     }()
     
+    private lazy var playButton: UIButton = {
+        var config = UIButton.Configuration.plain()
+        config.image = UIImage(systemName: "play")?.applyingSymbolConfiguration(.init(pointSize: 60))
+       
+        config.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
+        config.baseForegroundColor = .orange
+        
+        let button = UIButton(configuration: config)
+        button.imageView?.contentMode = .scaleAspectFit
+        button.addTarget(self, action: #selector(playButtonTapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        return button
+    }()
+    
     // MARK: - Init
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -46,19 +61,27 @@ class ViewController: UIViewController {
     private func setupHierarchy() {
         view.backgroundColor = .white
         view.addSubview(timeCounterLabel)
-        
+        view.addSubview(playButton)
     }
     
     private func setupLayout() {
         NSLayoutConstraint.activate([
             timeCounterLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            timeCounterLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            timeCounterLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
+            playButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            playButton.topAnchor.constraint(equalTo: timeCounterLabel.bottomAnchor, constant: 30),
+            playButton.heightAnchor.constraint(equalToConstant: 100),
+            playButton.widthAnchor.constraint(equalToConstant: 100)
         ])
     }
     
     // MARK: - Actions
     
-    
+    @objc
+    private func playButtonTapped() {
+        print("playButtonTapped")
+    }
     
 }
 
