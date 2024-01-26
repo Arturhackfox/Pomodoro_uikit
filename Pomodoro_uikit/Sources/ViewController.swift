@@ -33,9 +33,10 @@ class ViewController: UIViewController {
         config.image = UIImage(systemName: "play")?.applyingSymbolConfiguration(.init(pointSize: 60))
        
         config.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
-        config.baseForegroundColor = .orange
+
         
         let button = UIButton(configuration: config)
+        button.tintColor = .orange
         button.imageView?.contentMode = .scaleAspectFit
         button.addTarget(self, action: #selector(playButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -88,11 +89,16 @@ class ViewController: UIViewController {
     private func playButtonTapped() {
         if timer == nil {
                    // Start the timer
+            timeCounterLabel.textColor = .systemGreen
+            playButton.tintColor = .systemGreen
                    timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateCountdown), userInfo: nil, repeats: true)
                } else {
                    // Stop the timer
                    timer?.invalidate()
                    timer = nil
+                   
+                   timeCounterLabel.textColor = .orange
+                   playButton.tintColor = .orange
                }
         print("playButtonTapped")
     }
