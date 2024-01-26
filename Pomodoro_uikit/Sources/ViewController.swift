@@ -9,11 +9,16 @@ import UIKit
 
 class ViewController: UIViewController {
     
+    // MARK: Properties
+    
+    private var timer: Timer?
+    private var currentCounter = 25
+
+    
     // MARK: - UI
     
     private lazy var timeCounterLabel: UILabel = {
         let label = UILabel()
-        var currentCounter = 25
         label.text = "\(currentCounter):00"
         label.font = .systemFont(ofSize: 60, weight: .light)
         label.textColor = .orange
@@ -54,6 +59,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         setupHierarchy()
         setupLayout()
+        
     }
     
     // MARK: - Setup
@@ -80,8 +86,33 @@ class ViewController: UIViewController {
     
     @objc
     private func playButtonTapped() {
+        if timer == nil {
+                   // Start the timer
+                   timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateCountdown), userInfo: nil, repeats: true)
+               } else {
+                   // Stop the timer
+                   timer?.invalidate()
+                   timer = nil
+               }
         print("playButtonTapped")
     }
     
+    @objc
+    private func updateCountdown() {
+        currentCounter -= 1
+        
+        updateLabelCount()
+        
+        
+        if currentCounter == 0 {
+            timer?.invalidate()
+            timer = nil
+        }
+    }
+    
+    @objc
+    private func updateLabelCount() {
+        timeCounterLabel.text = "\(currentCounter):00"
+    }
 }
 
