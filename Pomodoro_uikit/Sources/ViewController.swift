@@ -13,6 +13,8 @@ class ViewController: UIViewController {
     
     private var timer: Timer?
     private var currentCounter = 25
+    
+    private var isWorkTime = true
 
     
     // MARK: - UI
@@ -45,12 +47,26 @@ class ViewController: UIViewController {
         var config = UIButton.Configuration.bordered()
         config.title = "Start Work"
         config.baseForegroundColor = .white
-        config.baseBackgroundColor = .orange
+        config.baseBackgroundColor = .systemOrange
+        config.cornerStyle = .capsule
+        
+        let button = UIButton(configuration: config)
+        button.addTarget(self, action: #selector(startWorkButtonTapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        return button
+    }()
+    
+    private lazy var startBreakButton: UIButton = {
+        var config = UIButton.Configuration.bordered()
+        config.title = "Start Break"
+        config.baseForegroundColor = .white
+        config.baseBackgroundColor = .systemBlue
         config.cornerStyle = .capsule
         
         let button = UIButton(configuration: config)
         button.tintColor = .orange
-        button.addTarget(self, action: #selector(startWorkButtonTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(startBreakButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         
         return button
@@ -82,6 +98,7 @@ class ViewController: UIViewController {
         view.addSubview(timeCounterLabel)
         view.addSubview(playButton)
         view.addSubview(startWorkButton)
+        view.addSubview(startBreakButton)
     }
     
     private func setupLayout() {
@@ -97,6 +114,13 @@ class ViewController: UIViewController {
             startWorkButton.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -100),
             startWorkButton.centerYAnchor.constraint(equalTo: playButton.bottomAnchor, constant: 120),
             startWorkButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
+            startWorkButton.heightAnchor.constraint(equalToConstant: 40),
+            
+            startBreakButton.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 100),
+            startBreakButton.centerYAnchor.constraint(equalTo: playButton.bottomAnchor, constant: 120),
+            startBreakButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
+            startBreakButton.heightAnchor.constraint(equalToConstant: 40),
+
             
         ])
     }
@@ -115,14 +139,20 @@ class ViewController: UIViewController {
                    timer?.invalidate()
                    timer = nil
                    
-                   timeCounterLabel.textColor = .orange
-                   playButton.tintColor = .orange
+                   timeCounterLabel.textColor = isWorkTime ? .systemOrange : .systemBlue
+                   playButton.tintColor = isWorkTime ? .systemOrange : .systemBlue
                }
         print("playButtonTapped")
     }
     
     @objc
     private func updateCountdown() {
+        
+        guard currentCounter > 0 else {
+            print("count is already at 0, time to work.")
+            return
+        }
+        
         currentCounter -= 1
         
         updateLabelCount()
@@ -141,7 +171,20 @@ class ViewController: UIViewController {
     
     @objc
     private func startWorkButtonTapped() {
+        currentCounter = 25
+        updateLabelCount()
+        timeCounterLabel.textColor = .systemOrange
+        playButton.tintColor = .systemOrange
         print("startWorkButtonTapped")
+    }
+    
+    @objc
+    private func startBreakButtonTapped() {
+        currentCounter = 5
+        updateLabelCount()
+        timeCounterLabel.textColor = .systemBlue
+        playButton.tintColor = .systemBlue
+        print("startBreakButtonTapped")
     }
 }
 
