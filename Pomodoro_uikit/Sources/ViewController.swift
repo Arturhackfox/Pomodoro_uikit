@@ -31,14 +31,26 @@ class ViewController: UIViewController {
     private lazy var playButton: UIButton = {
         var config = UIButton.Configuration.plain()
         config.image = UIImage(systemName: "play")?.applyingSymbolConfiguration(.init(pointSize: 60))
-       
-        config.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
-
         
         let button = UIButton(configuration: config)
         button.tintColor = .orange
         button.imageView?.contentMode = .scaleAspectFit
         button.addTarget(self, action: #selector(playButtonTapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        return button
+    }()
+    
+    private lazy var startWorkButton: UIButton = {
+        var config = UIButton.Configuration.bordered()
+        config.title = "Start Work"
+        config.baseForegroundColor = .white
+        config.baseBackgroundColor = .orange
+        config.cornerStyle = .capsule
+        
+        let button = UIButton(configuration: config)
+        button.tintColor = .orange
+        button.addTarget(self, action: #selector(startWorkButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         
         return button
@@ -69,6 +81,7 @@ class ViewController: UIViewController {
         view.backgroundColor = .white
         view.addSubview(timeCounterLabel)
         view.addSubview(playButton)
+        view.addSubview(startWorkButton)
     }
     
     private func setupLayout() {
@@ -79,7 +92,12 @@ class ViewController: UIViewController {
             playButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             playButton.topAnchor.constraint(equalTo: timeCounterLabel.bottomAnchor, constant: 30),
             playButton.heightAnchor.constraint(equalToConstant: 100),
-            playButton.widthAnchor.constraint(equalToConstant: 100)
+            playButton.widthAnchor.constraint(equalToConstant: 100),
+            
+            startWorkButton.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -100),
+            startWorkButton.centerYAnchor.constraint(equalTo: playButton.bottomAnchor, constant: 120),
+            startWorkButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
+            
         ])
     }
     
@@ -119,6 +137,11 @@ class ViewController: UIViewController {
     @objc
     private func updateLabelCount() {
         timeCounterLabel.text = "\(currentCounter):00"
+    }
+    
+    @objc
+    private func startWorkButtonTapped() {
+        print("startWorkButtonTapped")
     }
 }
 
